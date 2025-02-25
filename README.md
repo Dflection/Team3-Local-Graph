@@ -8,6 +8,7 @@ Team 3's vision of the campus at Columbia College
 # Mapping Resources
 Primary Caltopo Project:
   https://caltopo.com/m/188QUH1/06TA0MBVT97086HB
+
 Campus Trails Overlay File:
   (https://drive.google.com/file/d/1pxUVkwL38wILlCPSZYyZI0kBTXLTrq9k/view?usp=sharing)
   
