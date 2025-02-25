@@ -4,6 +4,7 @@ Team 3's vision of the campus at Columbia College
 # UML Diagrams
 ![TLGUML](https://github.com/user-attachments/assets/a000ef58-8da4-4520-85c4-0ae5c2376c79)
 ![UML_2](https://github.com/user-attachments/assets/67ed9fee-3cee-49f2-bcba-03ccb1148a64)
+![Group 3 Meetings](https://github.com/user-attachments/assets/e590f2a1-9fc1-410b-a867-4483cf51732a)
 
 # Mapping Resources
 Primary Caltopo Project:
