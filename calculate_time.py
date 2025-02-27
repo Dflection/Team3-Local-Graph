@@ -27,14 +27,15 @@ else:
 
 def calculate_from_cells(gain, loss, distance):
     """Calculates time based on Naismith's Rule.
-    Total Time (minutes) = ( (distance / 1000) / 5 + (elevation gain / 600) - ( (elevation loss / 300) * 10 / 60 ) ) * 60
+    Total Time (seconds) = ( (distance / 1000) / 5 + (elevation gain / 600) - ( (elevation loss / 300) * 10 / 60 ) ) * 3600
 
-    Explanation:
-        It converts distance (meters to km) and divides by speed (5 km/h) for travel time.  
-        It divides elevation gain by 600 m/h for gain time. 
-        It divides elevation loss by 300 m/10min, multiplies by 10 to get minutes, and divides by 60 for hours.  
-        The travel and gain times are summed, loss time is subtracted, 
-        and the result (in hours) is multiplied by 60 for minutes.
+Explanation: 
+    It converts distance (meters to km) and divides by speed (5 km/h) for travel time.
+    It divides elevation gain by 600 m/h for gain time.
+    It divides elevation loss by 300 m/10min, multiplies by 10 to get minutes, and divides by 60 for hours.
+    The travel and gain times are summed, loss time is subtracted, and the result (in hours) is
+    multiplied by 3600 for seconds.
+
 
     Args:
         gain: Elevation gain in meters.
@@ -55,7 +56,7 @@ def calculate_from_cells(gain, loss, distance):
     distance_time = km / flat_speed  # hours, the time it will take to travel the distance.
     gain_time = gain / gain_rate  # hours, the time it will take to travel up the elevation gain.
     loss_time = (loss / loss_rate * 10) / 60  # Convert loss time to hours, the time that will be reduced by going down.
-    total_time_seconds = (distance_time + gain_time - loss_time) * 60 #the formula to calculate total time.
+    total_time_seconds = (distance_time + gain_time - loss_time) * 3600 #the formula to calculate total time.
     return total_time_seconds
 
 
