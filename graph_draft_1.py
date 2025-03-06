@@ -30,10 +30,14 @@ class Graph:
             self.node_type[name] = is_building
 
     def add_connection(self, source, destination, time):
-        """Creates a unidirectional connection from source to destination with a given travel time."""
+        """Creates a unidirectional connection from source to destination with a given travel time.
+        
+        The time is converted to a Python int to avoid printing np.float64.
+        """
         if source not in self.nodes or destination not in self.nodes:
             raise ValueError("Both locations must be added before connecting them.")
-        self.nodes[source]['connections'][destination] = time
+        # Convert the time to a Python int before storing it.
+        self.nodes[source]['connections'][destination] = int(time)
 
     def load_from_excel(self, excel_file='data.xlsx'):
         """
@@ -161,6 +165,16 @@ class Graph:
         print("Location Data:", self.location_data)
         print("Node Types:", self.node_type)
 
+    def get_connection_matrix(self):
+        """
+        Constructs and returns a dictionary representing the connection matrix of the graph.
+        Each key is a node, and its value is a dictionary of destination nodes with travel times.
+        """
+        connection_matrix = {}
+        for node, data in self.nodes.items():
+            connection_matrix[node] = data['connections']
+        return connection_matrix
+
     def __repr__(self):
         """
         Returns a string representation of the graph, listing each node with its details, including node type,
@@ -178,6 +192,31 @@ class Graph:
         return output
 
 
+class MarcelGraph:
+    """
+    Represents the connection matrix of a Graph in a dictionary format.
+    This object is used for testing and displays the matrix in a formatted manner.
+    """
+    def __init__(self, connection_matrix):
+        self.graph = connection_matrix
+
+    def test_print(self):
+        """
+        Prints the connection matrix in a formatted manner similar to the example:
+        
+        graph = {
+            'A': {'B': 1},
+            'B': {'C': 2, 'D': 1},
+            ...
+        }
+        """
+        print("MarcelGraph Connection Matrix:")
+        print("{")
+        for node, connections in self.graph.items():
+            print(f"    '{node}': {connections},")
+        print("}")
+
+
 if __name__ == '__main__':
     graph = Graph()
     try:
@@ -186,6 +225,12 @@ if __name__ == '__main__':
         print(f"Error loading Excel data: {e}")
     else:
         print(graph)
-        graph.print_raw_graph()
+        # graph.print_raw_graph()
+        # Generate the connection matrix and create a MarcelGraph object.
+        connection_matrix = graph.get_connection_matrix()
+        marcel_graph = MarcelGraph(connection_matrix)
+        # Test method to print the connection matrix in a formatted manner.
+        marcel_graph.test_print()
         # Optionally, export the graph data back to Excel.
         # graph.export_to_excel()
+
