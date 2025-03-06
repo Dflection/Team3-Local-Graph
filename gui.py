@@ -18,7 +18,7 @@ with open(PATHS_ON_CAMPUS, "r") as f:
 # Extract features
 features = data["features"]
 
-# processes the features into DataFrame
+# processes the pathways into DataFrame
 paths_data = []
 for feature in features:
     if feature["geometry"]["type"] == "LineString":
@@ -69,7 +69,9 @@ scatter_layer = pdk.Layer(
     # sets the color of the points
     get_color='[200, 30, 0, 160]',
     get_radius=2,
-    pickable=True
+    pickable=True,
+    clickable=True,
+    auto_highlight=True
 )
 
 # Sets the viewport location
@@ -86,3 +88,6 @@ st.pydeck_chart(pdk.Deck(
     initial_view_state=view_state,
     map_style="mapbox://styles/mapbox/light-v10"
 ))
+
+start_point = st.selectbox('where would you like to start from?', ('Manzanita', 'Sequoiyah', 'Sugarpine', 'Fir', 'Juniper', 'Poison Oak', 'short term parking', 'long term parking', 'Oak Pavilion'))
+end_point = st.selectbox('where would you like to go?', ('Manzanita', 'Sequoiyah', 'Sugarpine', 'Fir', 'Juniper', 'Poison Oak', 'short term parking', 'long term parking', 'Oak Pavilion'))
