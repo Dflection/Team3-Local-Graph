@@ -8,7 +8,7 @@ import pandas as pd
 import json
 
 # Load GeoJSON file
-PATHS_ON_CAMPUS = "campus_map_1.json"
+PATHS_ON_CAMPUS = "Tuolumne_County_Track_Me.json"
 
 # Read JSON file
 with open(PATHS_ON_CAMPUS, "r") as f:
