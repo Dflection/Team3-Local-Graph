@@ -1,7 +1,7 @@
 """
 this window is for handling streamlit experiments
 """
-from utilities import path
+# from utilities import path
 import streamlit as st
 import pandas as pd
 import pydeck as pdk
@@ -31,7 +31,6 @@ import pydeck as pdk
 
 # deck = pdk.Deck(layers=[path_layer], initial_view_state=initial_view_state, tooltip={"text": "{name}"})
 # deck.to_html("bart_path_layer.html")
-
 
 
 file_path = "output.xlsx"
