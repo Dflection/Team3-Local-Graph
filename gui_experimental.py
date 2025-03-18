@@ -72,71 +72,20 @@ for i, row in df.iterrows():
         fill_opacity=0.7,
     ).add_to(m)
 
-# initializes session state variables
-if "selected_node" not in st.session_state:
-    st.session_state.selected_node = None
-
-
-# generates unique IDs for each node
-def generate_node_id(index):
-    return f"Node-{index+1}"
-
-
 # creates the folium map in streamlit
 m = st_folium(m, width=700)
-
-# if there is a map, it gets the last clicked coordinate values
-if m and m.get("last_clicked"):
-    # gets the tuple values for the coordinates
-    clicked_coords = tuple(m["last_clicked"].values())
-    # stores the selected node
-    st.session_state.selected_node = clicked_coords
-
-
-# empties the stored coordinate values from previous navigation
-if "starting_node" not in st.session_state:
-    st.session_state.starting_node = None
-if "ending_node" not in st.session_state:
-    st.session_state.ending_node = None
-if "selected_node" not in st.session_state:
-    st.session_state.selected_node = None
-
-# creates a button to save the starting node
-if st.button("Start point"):
-    if st.session_state.selected_node:
-        st.session_state.starting_node = st.session_state.selected_node
-        st.success(f"Starting location saved: {st.session_state.starting_node}")
-    else:
-        st.warning("Error... click on a node first")
-
-# creates a button to save the ending node
-if st.button("End point"):
-    if st.session_state.selected_node:
-        st.session_state.ending_node = st.session_state.selected_node  # Save selection
-        st.success(f"Ending location saved: {st.session_state.ending_node}")
-    else:
-        st.warning("Error... click on a node first")
-
-# prints the stored nodes
-if st.session_state.starting_node:
-    st.write(f"**Stored Starting Location:** {st.session_state.starting_node}")
-if st.session_state.ending_node:
-    st.write(f"**Stored Ending Location:** {st.session_state.ending_node}")
-
-# creates a button to activate dixtras
-if st.button("Start Navigation"):
-    if st.session_state.starting_node and st.session_state.ending_node:
-        st.write(f"Running Dijkstra's algorithm between {st.session_state.starting_node} and {st.session_state.ending_node}")
-    else:
-        st.warning("Error... please set both a starting and an ending node first!")
 
 # creates dropdown menu boxes for selecting the locations for navigation
 start_point = st.selectbox('where would you like to start from?', ('Manzanita', 'Sequoiyah', 'Sugarpine', 'Fir', 'Juniper', 'Poison Oak', 'short term parking', 'long term parking', 'Oak Pavilion'))
 end_point = st.selectbox('where would you like to go?', ('Manzanita', 'Sequoiyah', 'Sugarpine', 'Fir', 'Juniper', 'Poison Oak', 'short term parking', 'long term parking', 'Oak Pavilion'))
 
-# creates a seperate button to activate dixtras from the dropdown menu
-if st.button("start navigation"):
-    if st.session_state.selected_node:
-        st.write("running dixtras")
-    else:
-        st.warning("error... click on a node first")
+
+if st.button("Confirm Route"):
+    # Store values in session state
+    st.session_state.saved_start = start_point
+    st.session_state.saved_end = end_point
+
+    # Print the confirmation message
+    st.success(f"Navigating from {st.session_state.saved_start} to {st.session_state.saved_end}")
+    st.write(f"**Start Point:** {st.session_state.saved_start}")
+    st.write(f"**End Point:** {st.session_state.saved_end}")
