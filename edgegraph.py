@@ -4,12 +4,12 @@
 
 import os
 import pandas as pd
+import ast
 from openpyxl import load_workbook
 
 # ----------------------------------------------------------------------------------
 # Graph Class
 # ----------------------------------------------------------------------------------
-
 
 class Graph:
     """
@@ -102,7 +102,6 @@ class Graph:
 # ExcelGraphIO Class
 # ----------------------------------------------------------------------------------
 
-
 class ExcelGraphIO:
     """
     Handles all Excel input/output operations for the graph.
@@ -115,13 +114,13 @@ class ExcelGraphIO:
     """
 
     @staticmethod
-    def load_graph_from_excel(graph, excel_file='data.xlsx'):
+    def load_graph_from_excel(graph, excel_file='compendium_vals.xlsx'):
         """
         Loads graph data from the specified Excel file into the provided Graph object.
 
         Parameters:
           - graph (Graph): An instance of the Graph class to populate.
-          - excel_file (str): Path to the Excel file (default is 'data.xlsx').
+          - excel_file (str): Path to the Excel file (default is 'compendium_vals.xlsx').
 
         Raises:
           - FileNotFoundError: If the Excel file does not exist.
@@ -152,7 +151,8 @@ class ExcelGraphIO:
         # Load Coordinate Data
         # ---------------------------
         try:
-            coords_df = pd.read_excel(excel_file, sheet_name='coords', header=0)
+            # Force reading the 'coords' column as a string.
+            coords_df = pd.read_excel(excel_file, sheet_name='coords', header=0, dtype={'coords': str})
             coords_df.columns = coords_df.columns.str.strip().str.lower()
         except Exception as e:
             raise Exception(f"Failed to load 'coords' sheet: {e}")
@@ -160,15 +160,24 @@ class ExcelGraphIO:
         # Process each row to extract latitude and longitude.
         for _, row in coords_df.iterrows():
             location = row['location']
-            # Remove surrounding parentheses.
-            coords_str = str(row['coords']).strip("()")
-            try:
-                # Split the coordinate string into latitude and longitude.
-                lat_str, lon_str = coords_str.split(',')
-                lat = float(lat_str.strip())
-                lon = float(lon_str.strip())
-            except Exception:
-                raise ValueError(f"Invalid coordinates format for location {location}: {row['coords']}")
+            coords_value = row['coords']
+            
+            # If the cell is missing or reads as 'nan', warn and assign default (None, None)
+            if pd.isna(coords_value) or str(coords_value).strip().lower() == 'nan':
+                print(f"Warning: Coordinate for location {location} is missing; assigning (None, None)")
+                lat, lon = None, None
+            else:
+                try:
+                    # Safely evaluate the coordinate cell's content as a tuple.
+                    coords_tuple = ast.literal_eval(coords_value)
+                    # Verify that the evaluated value is a tuple with exactly two elements.
+                    if not (isinstance(coords_tuple, tuple) and len(coords_tuple) == 2):
+                        raise ValueError
+                    # Convert each element to float.
+                    lat, lon = map(float, coords_tuple)
+                except Exception:
+                    raise ValueError(f"Invalid coordinates format for location {location}: {coords_value}")
+            
             # Use node_type mapping to determine if this location is a building.
             is_building = node_type_mapping.get(location, False)
             graph.add_location(location, lat, lon, is_building)
@@ -205,13 +214,13 @@ class ExcelGraphIO:
         print(f"Graph data successfully loaded from {excel_file}")
 
     @staticmethod  # These were kinda neat to learn about, might be a cool python 1 addition
-    def export_graph_to_excel(graph, excel_file='data.xlsx'):
+    def export_graph_to_excel(graph, excel_file='compendium_vals.xlsx'):
         """
         Exports the graph data to an Excel file with three sheets: 'time', 'coords', and 'node_type'.
 
         Parameters:
           - graph (Graph): The graph object containing the data to export.
-          - excel_file (str): The destination Excel file (default is 'data.xlsx')
+          - excel_file (str): The destination Excel file (default is 'compendium_vals.xlsx')
 
         The method constructs DataFrames for each aspect of the graph and writes them to the file.
         If the file already exists, it replaces the existing sheets.
@@ -267,7 +276,6 @@ class ExcelGraphIO:
 # Utility Classes for presentation to Marcel's modules
 # ----------------------------------------------------------------------------------
 
-
 class MarcelGraph:
     """
     Utility class for displaying the connection matrix in a formatted manner.
@@ -293,7 +301,6 @@ class MarcelGraph:
         for node, connections in self.graph.items():
             print(f"    '{node}': {connections},")
         print("}")
-
 
 class CoordGraph:
     """
@@ -329,7 +336,6 @@ class CoordGraph:
         for location, coord in self.coords.items():
             output += f"  {location}: {coord}\n"
         return output
-
 
 class TypeGraph:
     """
@@ -368,7 +374,6 @@ class TypeGraph:
 # ----------------------------------------------------------------------------------
 # Test Execution
 # ----------------------------------------------------------------------------------
-
 
 if __name__ == '__main__':
     # Instantiate an empty Graph.
