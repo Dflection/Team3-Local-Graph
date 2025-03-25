@@ -1,23 +1,48 @@
-The Local Graph
-Group 3's campus navigation solution
-Project by Ashton Pankey, Chase Varvayanis, Dylan Henley, Marcel Ortiz, and Melanie Foley
-Readme by Chase Varvayanis
+# The Local Graph
 
-TO RUN:
-    - Run by opening RUN_LOCAL_GRAPH.py, all dependencies should automatically be installed
+**Group 3's campus navigation solution**
 
-USE INSTRUCTIONS:
-    - To navigate, Search for a start and end point by typing into the boxes below the map, and then selecting 'Find Route' at the bottom of the page to plot your route.
-    - If you would like to add intermediate waypoints, say you want to got from Fir to Manzanita to Oak Pavilion, Select Fir as a start waypoint and Oak Pavilion as an end waypoint. Below these fields, under the 'Optional Waypoints' Heading, search or use the dropdown box to use intermediate waypoints. When all start, finish, and intermediate waypoints are added select Find Route Once again at the bottom of the page
-    - To clear the path and start a new search query, select the clear paths button at the bottom of the page.
-    - To see all path data in the system, select the 'All Path Data' checkbox at the bottom of the page to toggle its visibility
+**Project by:** Ashton Pankey, Chase Varvayanis, Dylan Henley, Marcel Ortiz, and Melanie Foley  
+**Readme by:** Chase Varvayanis
 
-PLANNED/POTENTIAL FUTURE FEATURES:
-    - More comprehensive campus trail and building data
-    - AI Text to Speech and voice navigation
-    - Compilation into a standalone executable (streamlit made this more of a challenge than i thought...)
-    - Hosting  of application on webserver
+---
 
-KNOWN ISSUES:
-    - Certain paths have display errors (notably, the path between ~Pinyon and Ponderosa has a graphical display error)
-    - Path data is not comprehensive, there are a number of auxiliary and primary paths that were missed by our dataset, notably the path from dorm parking to campus, lower student parking by Oak Pavilion, and path between Redbud and Tamarack Hall.
+## To Run
+
+- Open `RUN_LOCAL_GRAPH.py`  
+  All dependencies should automatically be installed.
+
+---
+
+## Use Instructions
+
+- **Navigation:**  
+  Search for a start and end point by typing into the boxes below the map, then select **Find Route** at the bottom of the page to plot your route.
+  
+- **Intermediate Waypoints:**  
+  If you would like to add intermediate waypoints (for example, going from Fir to Manzanita to Oak Pavilion), select **Fir** as the start waypoint and **Oak Pavilion** as the end waypoint. Under the **Optional Waypoints** heading, either search or use the dropdown box to add intermediate waypoints. Once all start, finish, and intermediate waypoints are added, select **Find Route** again at the bottom of the page.
+  
+- **Clearing the Path:**  
+  To clear the path and start a new search query, select the **Clear Paths** button at the bottom of the page.
+  
+- **Viewing All Path Data:**  
+  To see all path data in the system, select the **All Path Data** checkbox at the bottom of the page to toggle its visibility.
+
+---
+
+## Planned/Potential Future Features
+
+- More comprehensive campus trail and building data.
+- AI text-to-speech and voice navigation.
+- Compilation into a standalone executable (Streamlit made this more challenging than anticipated).
+- Hosting the application on a web server.
+
+---
+
+## Known Issues
+
+- Certain paths have display errors (notably, the path between ~Pinyon and Ponderosa has a graphical display error).
+- Path data is not comprehensive; some auxiliary and primary paths are missing from our dataset, including:
+  - The path from dorm parking to campus.
+  - Lower student parking by Oak Pavilion.
+  - The path between Redbud and Tamarack Hall.
