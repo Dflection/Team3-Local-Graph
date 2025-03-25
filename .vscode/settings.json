@@ -1,6 +1,15 @@
 {
     "cSpell.words": [
-        "iterrows",
-        "notna"
+        "dijkstras",
+        "edgegraph",
+        "iloc",
+        "latlon",
+        "nlat",
+        "nlon",
+        "notna",
+        "Pankey",
+        "qgis",
+        "selectbox",
+        "streamlit"
     ]
 }
