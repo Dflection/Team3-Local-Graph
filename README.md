@@ -1,3 +1,5 @@
+**DEPRECATED, TIMES NOW CALCULATED WITHIN EXCEL SPREADSHEET**
+
 # Naismith's Rule Travel Time Calculator
 
 This project calculates estimated travel times for hiking or travel routes using Naismith's Rule. It reads elevation gain, elevation loss, and distance data from an Excel file (`data.xlsx`) and outputs calculated travel times back into the same file.
