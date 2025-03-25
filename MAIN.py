@@ -4,13 +4,15 @@ from streamlit_folium import st_folium
 import json
 import os
 import math
-from folium.features import DivIcon  # For text labels on the map
 from edgegraph import Graph
 from dijkstras_algorithm import dijkstra
+
 
 # ----------------------------------------------------------------------------------
 # Utility: Load and Save Voice Updates (JSON)
 # ----------------------------------------------------------------------------------
+
+
 def load_voice_update(file_path="voice_update.json"):
     """Load voice update data from a JSON file if it exists."""
     if not os.path.exists(file_path):
@@ -23,6 +25,7 @@ def load_voice_update(file_path="voice_update.json"):
         st.error(f"Error reading {file_path}: {e}")
         return None
 
+
 def save_voice_update(data: dict, file_path="voice_update.json"):
     """Save voice update data to a JSON file."""
     try:
@@ -31,9 +34,12 @@ def save_voice_update(data: dict, file_path="voice_update.json"):
     except Exception as e:
         st.error(f"Error writing to {file_path}: {e}")
 
+
 # ----------------------------------------------------------------------------------
 # Helper: Format time and distance
 # ----------------------------------------------------------------------------------
+
+
 def format_time_in_minutes_seconds(total_seconds: float) -> str:
     """Convert seconds to a formatted string in minutes and seconds."""
     total_seconds = int(total_seconds)
@@ -46,22 +52,27 @@ def format_time_in_minutes_seconds(total_seconds: float) -> str:
     else:
         return f"{seconds} seconds"
 
+
 def format_distance_in_feet(distance_km: float) -> str:
     """Convert distance from kilometers to feet and return as string."""
     feet = distance_km * 3280.84
     return f"{int(feet)} feet"
 
+
 # ----------------------------------------------------------------------------------
 # Helper functions for snapping (buffered matching)
 # ----------------------------------------------------------------------------------
+
+
 def haversine_distance(lat1, lon1, lat2, lon2):
     """Calculate the distance (in meters) between two lat/lon points using the Haversine formula."""
     R = 6371000  # Earth radius in meters
     d_lat = math.radians(lat2 - lat1)
     d_lon = math.radians(lon2 - lon1)
-    a = math.sin(d_lat / 2) ** 2 + math.cos(math.radians(lat1)) * math.cos(math.radians(lat2)) * math.sin(d_lon / 2) ** 2
+    a = math.sin(d_lat / 2) ** 2 + math.cos(math.radians(lat1)) * math.cos(math.radians(lat2)) * math.sin(d_lon/2) ** 2
     c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
     return R * c
+
 
 def find_closest_node(lat, lon, node_data, threshold=5.0):
     """
@@ -84,9 +95,12 @@ def find_closest_node(lat, lon, node_data, threshold=5.0):
     else:
         return None
 
+
 # ----------------------------------------------------------------------------------
 # GeometryGraph: Build a graph from red lines in GeoJSON data
 # ----------------------------------------------------------------------------------
+
+
 class GeometryGraph:
     """
     Build a graph from GeoJSON red lines, splitting them at known campus nodes.
@@ -144,9 +158,12 @@ class GeometryGraph:
                 if nodeA and nodeB and nodeA != nodeB:
                     self.add_edge(nodeA, nodeB, segment_coords)
 
+
 # ----------------------------------------------------------------------------------
 # Dijkstra for GeometryGraph
 # ----------------------------------------------------------------------------------
+
+
 def geometry_dijkstra(geom_graph, start_node, end_node):
     """
     Run a mini Dijkstra algorithm on a GeometryGraph to find a path between nodes.
@@ -187,9 +204,12 @@ def geometry_dijkstra(geom_graph, start_node, end_node):
     path_edges.reverse()
     return path_edges
 
+
 # ----------------------------------------------------------------------------------
 # Enhanced CampusMap Class: Display map with paths and buildings
 # ----------------------------------------------------------------------------------
+
+
 class CampusMap:
     """Handles rendering of the campus map with GeoJSON data and graph routes."""
     def __init__(self, geojson_data, graph):
@@ -210,7 +230,7 @@ class CampusMap:
         self.parse_line_features()
 
         self.geometry_graph = GeometryGraph(graph.location_data, geojson_data, threshold=5.0)
-    
+
     def style_function(self, feature):
         """Return a style dict based on feature type."""
         props = feature.get("properties", {})
@@ -390,9 +410,12 @@ class CampusMap:
             ).add_to(self.route_group)
             self.map.fit_bounds(full_coords)
 
+
 # ----------------------------------------------------------------------------------
 # Cache-Enabled Data Loader: Load GeoJSON and graph data
 # ----------------------------------------------------------------------------------
+
+
 @st.cache_data
 def load_data(geojson_path, excel_path):
     """Load GeoJSON data and Excel-based graph, returning both."""
@@ -406,9 +429,12 @@ def load_data(geojson_path, excel_path):
         st.error(f"Data loading error: {str(e)}")
         return None, None
 
+
 # ----------------------------------------------------------------------------------
 # Compute Multi-Leg Route with Dijkstra
 # ----------------------------------------------------------------------------------
+
+
 def compute_full_route(graph, start, waypoints, end, metric_choice):
     """
     Compute a full route from start to end with optional waypoints using Dijkstra.
@@ -438,9 +464,12 @@ def compute_full_route(graph, start, waypoints, end, metric_choice):
         return None, float('inf')
     return all_edges, total_metric
 
+
 # ----------------------------------------------------------------------------------
 # Main Streamlit App
 # ----------------------------------------------------------------------------------
+
+
 def main():
     """Main function to run the Streamlit application."""
     st.title("The Local Graph")
@@ -531,9 +560,14 @@ def main():
 
     with col1:
         search_start = st.text_input("Search for a start building:")
-        filtered_start_buildings = [b for b in building_options if search_start.lower() in b.lower()]
-        start_building = st.selectbox("Start Building", options=filtered_start_buildings) if filtered_start_buildings else None
-
+        filtered_start_buildings = [
+            b for b in building_options if search_start.lower() in b.lower()
+        ]
+        start_building = (
+            st.selectbox("Start Building", options=filtered_start_buildings)
+            if filtered_start_buildings
+            else None
+        )
     with col2:
         search_end = st.text_input("Search for an end building:")
         filtered_end_buildings = [b for b in building_options if search_end.lower() in b.lower()]
@@ -594,6 +628,7 @@ def main():
 
     if st.session_state.success_message:
         st.success(st.session_state.success_message)
+
 
 if __name__ == "__main__":
     main()

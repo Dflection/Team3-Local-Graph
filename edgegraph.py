@@ -7,9 +7,12 @@ import os
 import pandas as pd
 from openpyxl import load_workbook
 
+
 # ----------------------------------------------------------------------------------
 # Graph Class
 # ----------------------------------------------------------------------------------
+
+
 class Graph:
     """
     Represents a directed graph of locations and connections between them.
@@ -79,15 +82,15 @@ class Graph:
 class ExcelGraphIO:
     """
     Handles Excel I/O operations for the graph.
-    
-    Assumes the Excel file has:
+
+    The Excel file has:
       - 4 sheets: "time", "distance", "gain", "loss" (adjacency matrices).
-      - Sheet "coords" with columns "node" and "coords".
+      - Sheet "coords" with columns "node" and "coords" (tuple).
       - Sheet "node_type" with columns "node" and "is_building".
     """
-    @staticmethod
+    @staticmethod  # https://www.geeksforgeeks.org/class-method-vs-static-method-python/
     def load_graph_from_excel(graph, excel_file='compendium.xlsx'):
-        """Loads graph data from the specified Excel file."""
+        """Loads graph data from the Excel file."""
         if not os.path.exists(excel_file):
             raise FileNotFoundError(f"Excel file not found at {excel_file}")
 
@@ -142,7 +145,7 @@ class ExcelGraphIO:
                 if not row.empty:
                     coords_str = row["coords"].iloc[0]
                     try:
-                        lat_str, lon_str = coords_str.split(",")  # Expected format: "lat, lon"
+                        lat_str, lon_str = coords_str.split(",")  # Expected format: "lat, lon" (decimal tuple)
                         latitude = float(lat_str.strip())
                         longitude = float(lon_str.strip())
                     except Exception as ex:
@@ -225,7 +228,7 @@ class ExcelGraphIO:
 # ----------------------------------------------------------------------------------
 class MarcelGraph:
     """
-    Utility class for displaying the connection matrix.
+    Utility class for displaying the connection matrix for Marcel's Dijkstra's Algorithm.
     """
     def __init__(self, connection_matrix):
         self.graph = connection_matrix
@@ -237,6 +240,7 @@ class MarcelGraph:
         for node, connections in self.graph.items():
             print(f"    '{node}': {connections},")
         print("}")
+
 
 class CoordGraph:
     """
@@ -258,6 +262,7 @@ class CoordGraph:
         for location, coord in self.coords.items():
             output += f"  {location}: {coord}\n"
         return output
+
 
 class TypeGraph:
     """
@@ -284,6 +289,8 @@ class TypeGraph:
 # ----------------------------------------------------------------------------------
 # Test Execution
 # ----------------------------------------------------------------------------------
+
+
 if __name__ == '__main__':
     # Initialize a graph and load data from Excel
     graph = Graph()
@@ -295,7 +302,7 @@ if __name__ == '__main__':
         # Print the graph representation
         print(graph)
         connection_matrix = graph.get_connection_matrix()
-        
+
         # Display the connection matrix using MarcelGraph
         marcel_graph = MarcelGraph(connection_matrix)
         marcel_graph.test_print()
