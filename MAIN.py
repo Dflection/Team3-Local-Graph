@@ -1,3 +1,7 @@
+# created by both Ashton and Dylan.
+# I, Ashton did the base gui and Dylan added AI to the gui and did refinements
+
+
 import streamlit as st
 import folium
 from streamlit_folium import st_folium
