@@ -5,6 +5,8 @@
 **Project by:** Ashton Pankey, Chase Varvayanis, Dylan Henley, Marcel Ortiz, and Melanie Foley  
 **Readme by:** Chase Varvayanis
 
+Link to meeting notes for Joe: https://docs.google.com/document/d/1ubF6wsYMC7tI2S15a7-ESKGq623QfgO-6o0--jVlKSo/edit?usp=sharing
+
 ---
 
 ## To Run
